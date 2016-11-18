@@ -1,9 +1,9 @@
 class Tile
-  attr_reader :bomb, :revealed
+  attr_reader :bomb, :visible
 
   def initialize(bomb = false)
     @bomb = bomb
-    @revealed = false
+    @visible = false
   end
 
   def display_val
@@ -15,15 +15,19 @@ class Tile
   end
 
   def to_str
-    if @revealed
-     display_val #properties: bomb, or blank(count: print if 1-8)
-    else
+    if visible
+     display_val
+   else
      "X"
-    end
+   end
   end
 
   def make_bomb
     @bomb = true
+  end
+
+  def make_visible
+    @visible = true
   end
 
 

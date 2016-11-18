@@ -11,6 +11,8 @@ class Board
 
   def initialize(grid = new_grid)
     @grid = grid
+
+    populate_with_bombs
   end
 
   def render
@@ -19,8 +21,18 @@ class Board
     render_str << "\n"
     grid.each_with_index do |row, idx|
       render_str << "#{idx} "
-      row.each do |el|
-        render_str << "#{el.to_str}|"
+      row.each_with_index do |el, el_idx|
+        if el.visible
+          if el.bomb
+            render_str << "*|"
+          elsif nearby_bombs([idx, el_idx]) > 0
+            render_str << "#{nearby_bombs([idx, el_idx])}|"
+          else
+            render_str << "#{el.to_str}|"
+          end
+        else
+          render_str << "X|"
+        end
       end
       render_str << "\n"
     end
@@ -29,7 +41,7 @@ class Board
     puts "\n\n"
   end
 
-  def populate
+  def populate_with_bombs
     bomb_locs = []
     until bomb_locs.length == 10
       x = (0..grid.length).to_a.sample
@@ -72,12 +84,6 @@ class Board
 
 end
 
-
-
-
-board = Board.new
-board.populate
-board.render
-p board.nearby_bombs([1, 2])
-p board.nearby_bombs([3, 2])
-p board.nearby_bombs([5, 5])
+# x = Board.new
+# x.populate_with_bombs
+# x.render
