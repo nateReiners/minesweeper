@@ -1,16 +1,17 @@
-require_relative 'board'
-
 class Tile
   attr_reader :bomb, :revealed
 
   def initialize(bomb = false)
     @bomb = bomb
-    @revealed = true
+    @revealed = false
   end
 
   def display_val
-    return "*" if bomb
-
+    if bomb
+      "*"
+    else
+      "_"
+    end
   end
 
   def to_str
@@ -21,10 +22,10 @@ class Tile
     end
   end
 
-  def flag
-
+  def make_bomb
+    @bomb = true
   end
 
-  
+
 
 end

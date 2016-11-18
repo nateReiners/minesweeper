@@ -20,7 +20,7 @@ class Board
     grid.each_with_index do |row, idx|
       render_str << "#{idx} "
       row.each do |el|
-        render_str << "#{el.to_str} "
+        render_str << "#{el.to_str}|"
       end
       render_str << "\n"
     end
@@ -30,13 +30,22 @@ class Board
   end
 
   def populate
-    count
-    grid.each_with_index do |row, row_idx|
-      row.each_with_index do |el, el_idx|
-
-      end
-
+    bomb_locs = []
+    until bomb_locs.length == 10
+      x = (0..grid.length).to_a.sample
+      y = (0...grid.length).to_a.sample
+      rand_pos = [x, y]
+      bomb_locs << rand_pos unless bomb_locs.include?(rand_pos)
     end
+
+    @grid.each_with_index do |row, r_idx|
+      row.each_with_index do |el, el_idx|
+        if bomb_locs.include?([r_idx, el_idx])
+          el.make_bomb
+        end
+      end
+    end
+
   end
 
   def nearby_bombs(pos)
@@ -67,5 +76,8 @@ end
 
 
 board = Board.new
-#p board.grid
+board.populate
 board.render
+p board.nearby_bombs([1, 2])
+p board.nearby_bombs([3, 2])
+p board.nearby_bombs([5, 5])
