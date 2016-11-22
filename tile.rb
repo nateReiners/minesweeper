@@ -1,5 +1,6 @@
 class Tile
-  attr_reader :bomb, :visible
+  attr_reader :bomb
+  attr_accessor :visible
 
   def initialize(bomb = false)
     @bomb = bomb

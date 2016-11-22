@@ -25,23 +25,41 @@ attr_reader :board
       pos = gets.chomp.split(",").map(&:to_i)
     end
       make_move(pos)
+
+      # need to fix this method!!!!
+      board.reveal_all_adj(pos)
   end
 
   def run
-    play_turn until won?
+    play_turn until won? || game_over?
+    board.render
+    if won?
+      puts "You Win!"
+    else
+      puts "You lost!"
+    end
+  end
+
+
+  def game_over?
+    board.grid.each do |row|
+      bombs = row.select { |el| el.bomb }
+      return true if bombs.any? { |el| el.visible }
+    end
+    false
   end
 
   def won?
     board.grid.each do |row|
-      if row.all? { |el| el.visible }
-        return true
-      end
+      non_bombs = row.reject { |el| el.bomb }
+      return true if non_bombs.all? { |el| el.visible }
     end
     false
   end
 
 end
 
-
-x = Minesweeper.new
-x.run
+if __FILE__ == $PROGRAM_NAME
+  x = Minesweeper.new
+  x.run
+end
